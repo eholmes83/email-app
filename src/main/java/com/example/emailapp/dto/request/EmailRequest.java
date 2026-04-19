@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class EmailRequest {
     private Long id;
-    private String senderEmail;
-    private String recipientEmail;
+    private String sender;
+    private String recipient;
     private String subject;
     private String body;
-    //private Boolean isRead;
+    private Boolean isRead;
 }
