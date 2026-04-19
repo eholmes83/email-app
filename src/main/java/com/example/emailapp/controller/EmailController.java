@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/emails")
 public class EmailController {
 
     private final EmailService emailService;
@@ -18,15 +18,28 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/getEmails")
+    @GetMapping()
     public ResponseEntity<List<EmailRequest>> getEmails() {
          List<EmailRequest> emailRequests = emailService.getEmails();
          return new ResponseEntity<>(emailRequests, HttpStatus.OK);
     }
 
-    @PostMapping("/createEmail")
+    @PostMapping("/create")
     public ResponseEntity<EmailRequest> createEmail(@RequestBody EmailRequest emailRequest) {
         EmailRequest createdEmail = emailService.createEmail(emailRequest);
         return new ResponseEntity<>(createdEmail, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmailRequest> deleteEmail(@PathVariable Long id) {
+        EmailRequest deletedEmail = emailService.deleteEmail(id);
+        return new ResponseEntity<>(deletedEmail, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmailRequest> updateEmail(@RequestBody EmailRequest emailRequest,
+                                                    @PathVariable Long id) {
+        EmailRequest updatedEmail = emailService.updateEmail(emailRequest, id);
+        return new ResponseEntity<>(updatedEmail, HttpStatus.OK);
     }
 }
