@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
         List<Email> emails = emailRepository.findAll();
 
         if (emails.isEmpty()) {
-            return null;
+           throw new RuntimeException("No emails found!");
         }
 
         return emails.stream()
@@ -37,5 +37,36 @@ public class EmailServiceImpl implements EmailService {
         Email createdEmail = mapper.convertValue(emailRequest, Email.class);
         emailRepository.save(createdEmail);
         return mapper.convertValue(createdEmail, EmailRequest.class);
+    }
+
+    @Override
+    public EmailRequest deleteEmail(Long id) {
+        Email emailToDelete = emailRepository.findById(id).orElse(null);
+
+        if (emailToDelete == null) {
+            throw new RuntimeException("Email with id " + id + " not found!");
+        }
+
+        emailRepository.delete(emailToDelete);
+        return mapper.convertValue(emailToDelete, EmailRequest.class);
+    }
+
+    @Override
+    public EmailRequest updateEmail(EmailRequest emailRequest, Long id) {
+        Email emailToUpdate = emailRepository.findById(id).orElse(null);
+
+        if (emailToUpdate == null) {
+            throw new RuntimeException("Email with id " + id + " not found!");
+        }
+
+        emailToUpdate.setSubject(emailRequest.getSubject());
+        emailToUpdate.setBody(emailRequest.getBody());
+        emailToUpdate.setSender(emailRequest.getSender());
+        emailToUpdate.setRecipient(emailRequest.getRecipient());
+        emailToUpdate.setIsRead(emailRequest.getIsRead());
+
+        Email updateEmail = emailRepository.save(emailToUpdate);
+        return mapper.convertValue(updateEmail, EmailRequest.class);
+
     }
 }
