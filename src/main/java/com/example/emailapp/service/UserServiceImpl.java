@@ -50,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
         userToUpdate.setEmailAddress(userRequest.getEmailAddress());
         userToUpdate.setPassword(userRequest.getPassword());
+        userToUpdate.setFirstName(userRequest.getFirstName());
+        userToUpdate.setLastName(userRequest.getLastName());
 
         User updatedUser = userRepository.save(userToUpdate);
         return mapper.convertValue(updatedUser, UserRequest.class);
